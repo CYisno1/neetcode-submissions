@@ -1,0 +1,26 @@
+class Solution:
+    def insert(self, intervals: List[List[int]], newInterval: List[int]) -> List[List[int]]:
+        res = []
+        # 三種情況
+        # 我們寫的newInterval是目前唯一還沒有 finalize 的 interval
+        # 可以放進res的是 確定處裡好的interval
+
+        for start, end in intervals:
+            # interval 在 newInterval左邊
+            if end < newInterval[0]:
+                res.append([start, end])
+
+            # interval 在 newInterval右邊
+            elif start > newInterval[1]:
+                res.append(newInterval)
+                newInterval = [start, end] # 這邊的newInterval是指還沒放進答案的interval
+            
+            # interval 跟 newInterval 有overlap
+            else:
+                newInterval[0] = min(start, newInterval[0])
+                newInterval[1] = max(end, newInterval[1])
+
+        # 所有 interval 都處理完，再把最後剩下的 newInterval 放進去    
+        res.append(newInterval)
+        return res
+
